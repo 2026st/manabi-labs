@@ -20,14 +20,14 @@ a {
   width: min(390px, 100vw);
   min-height: 100vh;
   margin: 0 auto;
-  background: var(--color-bg-surface);
+  background: var(--color-bg-page);
 }
 
 .header {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--color-bg-surface);
+  background: var(--color-bg-page);
   padding: 20px 10px 0;
 }
 
@@ -82,9 +82,14 @@ a {
 .icon-btn {
   width: 24px;
   height: 24px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-text-main);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .icon-btn > img {
@@ -92,6 +97,11 @@ a {
   height: 24px;
   display: block;
   object-fit: contain;
+}
+
+.icon-btn__svg {
+  width: 24px;
+  height: 24px;
 }
 
 .pencil-icon {
@@ -144,7 +154,7 @@ a {
   gap: 14px;
   padding: 20px;
   border-radius: 8px;
-  background: var(--color-bg-surface);
+  background: var(--color-bg-page);
   box-shadow: 0 0 4px var(--color-shadow);
   min-height: 107px;
 }
@@ -202,11 +212,11 @@ a {
 
 .btn--primary {
   background: var(--color-primary);
-  color: #fefefe;
+  color: var(--color-bg-page);
 }
 
 .btn--ghost {
-  background: #fefefe;
+  background: var(--color-bg-page);
   color: var(--color-primary);
 }
 
@@ -226,7 +236,7 @@ a {
 }
 
 .body-display {
-  border: 1px solid var(--color-line);
+  border: 1px solid var(--color-text-sub);
   border-radius: 10px;
   padding: 10px;
   font-size: 14px;
@@ -288,6 +298,7 @@ a {
   border-radius: 10px;
   font-family: inherit;
   color: var(--color-text-main);
+  background: var(--color-bg-page);
 }
 
 .input {
@@ -317,6 +328,7 @@ a {
   border: 1px solid var(--color-text-sub);
   border-radius: 10px;
   padding: 10px;
+  background: var(--color-bg-page);
   display: flex;
   gap: 12px;
   align-items: center;
@@ -326,6 +338,7 @@ a {
   border: 0;
   outline: none;
   width: 100%;
+  background: transparent;
   font: inherit;
   font-size: 12px;
   color: var(--color-text-sub);

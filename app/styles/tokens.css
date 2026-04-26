@@ -1,13 +1,21 @@
 :root {
   --font-main: "Rounded Mplus 1c", sans-serif;
 
-  --color-bg-page: #efefef;
-  --color-bg-surface: #fefefe;
+  --color-bg-page: #fefefe;
   --color-text-main: #4a4a4a;
   --color-text-sub: #8e8e8e;
   --color-primary: #4ec7b0;
   --color-primary-deep: #4ab8a2;
-  --color-line: #d9d9d9;
   --color-shadow: rgba(0, 0, 0, 0.25);
-  --color-card-icon: #a7e5d8;
+  --color-secondary: #a7e5d8;
+}
+
+:root.theme-dark {
+  --color-bg-page: #121414;
+  --color-text-main: #e6f1ef;
+  --color-text-sub: #a7b5b2;
+  --color-primary: #5fd1b5;
+  --color-primary-deep: #49b79d;
+  --color-shadow: rgba(255, 255, 255, 0.25);
+  --color-secondary: #7de2c4;
 }
