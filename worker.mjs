@@ -12,7 +12,11 @@ export default {
     const isHtmlRequest =
       request.method === "GET" &&
       request.headers.get("accept")?.includes("text/html");
-    const looksLikeFileRequest = url.pathname.includes(".");
+    // Treat only explicit file paths (e.g. /assets/app.js) as file requests.
+    // Dynamic route params may contain dots (e.g. /article/2026.04.26) and
+    // should still fall back to index.html for SPA routing.
+    const lastSegment = url.pathname.split("/").pop() ?? "";
+    const looksLikeFileRequest = /\.[a-zA-Z0-9]+$/.test(lastSegment);
 
     if (!isHtmlRequest || looksLikeFileRequest) {
       return response;
