@@ -1,12 +1,32 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { listStudySites, type StudySite } from "../lib/study-sites";
+import {
+  listStudySites,
+  type StudySite
+} from "../lib/supabase.server";
+
+const DEFAULT_SITES: StudySite[] = [
+  {
+    id: "fe-kakomon",
+    label: "基本情報技術者過去問道場",
+    url: "https://www.fe-siken.com/fekakomon.php"
+  }
+];
 
 export default function StudyRoute() {
   const [sites, setSites] = useState<StudySite[]>([]);
 
   useEffect(() => {
-    setSites(listStudySites());
+    let disposed = false;
+    async function load() {
+      const remoteSites = await listStudySites();
+      if (disposed) return;
+      setSites([...DEFAULT_SITES, ...remoteSites]);
+    }
+    load();
+    return () => {
+      disposed = true;
+    };
   }, []);
 
   return (

@@ -46,6 +46,14 @@ const supabase =
     ? createClient(supabaseUrl, supabaseKey)
     : null;
 
+export type StudySite = {
+  id: string;
+  label: string;
+  url: string;
+};
+
+const STUDY_LINK_SOURCE_PREFIX = "study-link/";
+
 async function fetchDocumentsByCategory(
   category: Category
 ): Promise<{ data: CorpusDocument[] | null; error: boolean }> {
@@ -86,6 +94,50 @@ export type ListArticlesResult = {
 
 export function isSupabaseReady() {
   return Boolean(supabase);
+}
+
+function normalizeStudySiteInput(input: {
+  label: string;
+  url: string;
+}): { label: string; url: string } | null {
+  const label = input.label.trim();
+  const rawUrl = input.url.trim();
+  if (!label || !rawUrl) return null;
+
+  let normalizedUrl = rawUrl;
+  if (!/^https?:\/\//i.test(normalizedUrl)) {
+    normalizedUrl = `https://${normalizedUrl}`;
+  }
+
+  try {
+    const parsed = new URL(normalizedUrl);
+    if (!["http:", "https:"].includes(parsed.protocol)) return null;
+    return { label, url: parsed.toString() };
+  } catch {
+    return null;
+  }
+}
+
+function parseStudySite(doc: CorpusDocument): StudySite | null {
+  try {
+    const parsed = JSON.parse(doc.content) as unknown;
+    if (
+      typeof parsed !== "object" ||
+      parsed === null ||
+      typeof (parsed as { label?: unknown }).label !== "string" ||
+      typeof (parsed as { url?: unknown }).url !== "string"
+    ) {
+      return null;
+    }
+
+    return {
+      id: doc.id,
+      label: (parsed as { label: string }).label,
+      url: (parsed as { url: string }).url
+    };
+  } catch {
+    return null;
+  }
 }
 
 export async function listArticles(category: Category): Promise<ViewArticle[]> {
@@ -188,4 +240,37 @@ export async function searchArticles(keyword: string): Promise<ViewArticle[]> {
   if (error || !data) return localItems;
   const remoteItems = (data as CorpusDocument[]).map(mapCorpusDocumentToArticle);
   return [...localItems, ...remoteItems];
+}
+
+export async function listStudySites(): Promise<StudySite[]> {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("corpus_documents")
+    .select("id,source_name,content,created_at,updated_at")
+    .like("source_name", `${STUDY_LINK_SOURCE_PREFIX}%`)
+    .order("updated_at", { ascending: false })
+    .limit(100);
+
+  if (error || !data) return [];
+
+  return (data as CorpusDocument[])
+    .map(parseStudySite)
+    .filter((site): site is StudySite => site !== null);
+}
+
+export async function createStudySite(input: {
+  label: string;
+  url: string;
+}): Promise<boolean> {
+  if (!supabase) return false;
+  const normalized = normalizeStudySiteInput(input);
+  if (!normalized) return false;
+
+  const source_name = `${STUDY_LINK_SOURCE_PREFIX}${crypto.randomUUID()}.json`;
+  const content = JSON.stringify(normalized);
+  const { error } = await supabase
+    .from("corpus_documents")
+    .insert({ source_name, content });
+
+  return !error;
 }

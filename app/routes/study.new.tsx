@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addStudySite } from "../lib/study-sites";
+import { createStudySite } from "../lib/supabase.server";
 
 export default function StudyNewRoute() {
   const navigate = useNavigate();
@@ -8,10 +8,10 @@ export default function StudyNewRoute() {
   const [siteUrl, setSiteUrl] = useState("");
   const [error, setError] = useState("");
 
-  function onSave() {
-    const ok = addStudySite({ label: siteLabel, url: siteUrl });
+  async function onSave() {
+    const ok = await createStudySite({ label: siteLabel, url: siteUrl });
     if (!ok) {
-      setError("サイト名と有効なURLを入力してください");
+      setError("保存に失敗しました。サイト名・URL・Supabase設定を確認してください");
       return;
     }
     navigate("/study");
