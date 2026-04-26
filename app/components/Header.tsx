@@ -30,11 +30,11 @@ export function Header({ paper = false }: { paper?: boolean }) {
   return (
     <header className={`header ${paper ? "header--paper" : ""}`}>
       <div className="header__top">
-        <Link to="/" className="brand" aria-label="まなびログ トップへ">
+        <Link to="/" className="brand" aria-label="まなびラボ トップへ">
           <img className="brand__logo" src={figmaAssets.logo.mark} alt="" aria-hidden />
           <span className="brand__wordmark">
             <img className="brand__accent" src={figmaAssets.logo.accent} alt="" aria-hidden />
-            <span className="brand__text">まなびログ</span>
+            <span className="brand__text">まなびラボ</span>
           </span>
         </Link>
         <div className="header__actions">
