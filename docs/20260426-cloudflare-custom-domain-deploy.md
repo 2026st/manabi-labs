@@ -14,3 +14,8 @@
 
 ## 補足
 - 必要な権限は少なくとも `Workers Scripts: Edit`。route 管理を伴うため `Workers Routes: Edit` も必要。
+
+## 方針変更（B案）
+- `wrangler.toml` から `[[routes]]` を削除し、route 管理をCloudflareダッシュボード側に委譲。
+- `workers_dev = false` は維持し、`workers.dev` への公開を無効化。
+- これにより、WranglerはWorker本体の更新のみに集中し、Zone Route APIの権限依存を回避する。
