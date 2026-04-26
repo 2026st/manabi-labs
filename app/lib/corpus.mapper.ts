@@ -19,6 +19,7 @@ export type ViewArticle = {
 
 export function inferCategory(sourceName: string): Category {
   if (sourceName.startsWith("articles/")) return "articles";
+  if (sourceName.startsWith("study-link/")) return "study";
   if (sourceName.startsWith("study/")) return "study";
   return "knowledge";
 }
