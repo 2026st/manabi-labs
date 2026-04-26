@@ -1,32 +1,28 @@
 export default {
   async fetch(request, env) {
-    const response = await env.ASSETS.fetch(request);
-
-    // SPA routing fallback: when a direct page reload requests a non-file path,
-    // return index.html so client-side routing can render the correct screen.
-    if (response.status !== 404) {
-      return withInjectedRuntimeEnv(response, env);
-    }
-
     const url = new URL(request.url);
-    const isHtmlRequest =
+    const isHtmlNavigationRequest =
       request.method === "GET" &&
       request.headers.get("accept")?.includes("text/html");
-    // Treat only explicit file paths (e.g. /assets/app.js) as file requests.
-    // Dynamic route params may contain dots (e.g. /article/2026.04.26) and
-    // should still fall back to index.html for SPA routing.
     const lastSegment = url.pathname.split("/").pop() ?? "";
-    const looksLikeFileRequest = /\.[a-zA-Z0-9]+$/.test(lastSegment);
+    const assetExtPattern =
+      /\.(?:js|mjs|cjs|css|map|json|txt|xml|ico|png|jpe?g|gif|webp|svg|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3|wav)$/i;
+    const looksLikeFileRequest = assetExtPattern.test(lastSegment);
 
-    if (!isHtmlRequest || looksLikeFileRequest) {
-      return response;
+    // Important: some asset hosts can return 30x for unknown paths. If we pass
+    // that through, browser reloads on SPA routes jump to "/". For document
+    // navigation requests on non-file paths, always serve index.html first.
+    if (isHtmlNavigationRequest && !looksLikeFileRequest && url.pathname !== "/") {
+      // Some asset setups redirect /index.html -> /. Return "/" directly
+      // to avoid propagating a 307 redirect to the browser.
+      const rootResponse = await env.ASSETS.fetch(
+        new Request(new URL("/", url.origin).toString(), request)
+      );
+      return withInjectedRuntimeEnv(rootResponse, env);
     }
 
-    const indexUrl = new URL("/index.html", url.origin);
-    const indexResponse = await env.ASSETS.fetch(
-      new Request(indexUrl.toString(), request)
-    );
-    return withInjectedRuntimeEnv(indexResponse, env);
+    const response = await env.ASSETS.fetch(request);
+    return withInjectedRuntimeEnv(response, env);
   }
 };
 
