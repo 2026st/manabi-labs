@@ -1,24 +1,6 @@
 import type { Category, ViewArticle } from "../lib/corpus.mapper";
 
-const today = new Date();
-const yyyy = today.getFullYear();
-const mm = `${today.getMonth() + 1}`.padStart(2, "0");
-const dd = `${today.getDate()}`.padStart(2, "0");
-const dateLabel = `${yyyy}/${mm}/${dd}`;
-
-const TEST_ARTICLES: ViewArticle[] = [
-  {
-    id: "local-test-article-001",
-    title: "テスト記事（ローカル）",
-    body: `# テスト記事（ローカル）
-
-このページはプロジェクト内データから表示しています。
-Supabaseに接続していなくても一覧・詳細で確認できます。`,
-    dateLabel,
-    category: "articles",
-    sourceName: "articles/local-test-article-001.md"
-  }
-];
+const TEST_ARTICLES: ViewArticle[] = [];
 
 export function getLocalTestArticles(category: Category): ViewArticle[] {
   return TEST_ARTICLES.filter((item) => item.category === category);
