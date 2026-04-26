@@ -13,10 +13,10 @@ import {
   type ViewArticle
 } from "./corpus.mapper";
 
-const env = (import.meta as ImportMeta & { env: Record<string, string | undefined> })
-  .env;
-const supabaseUrl = env.SUPABASE_URL;
-const supabaseKey = env.SUPABASE_KEY;
+const supabaseUrl =
+  import.meta.env.VITE_SUPABASE_URL ?? import.meta.env.SUPABASE_URL;
+const supabaseKey =
+  import.meta.env.VITE_SUPABASE_KEY ?? import.meta.env.SUPABASE_KEY;
 
 const supabase =
   supabaseUrl && supabaseKey
