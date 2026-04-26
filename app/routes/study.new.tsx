@@ -21,14 +21,14 @@ export default function StudyNewRoute() {
     <section className="paper-body form-stack">
       <h2>勉強サイトを追加</h2>
       <input
-        className="input"
+        className="input input--compact"
         value={siteLabel}
         onChange={(event) => setSiteLabel(event.target.value)}
         placeholder="サイト名を入力"
         maxLength={80}
       />
       <input
-        className="input"
+        className="input input--compact"
         value={siteUrl}
         onChange={(event) => setSiteUrl(event.target.value)}
         placeholder="URLを入力 (例: https://example.com)"

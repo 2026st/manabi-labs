@@ -306,9 +306,14 @@ a {
 }
 
 .input {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 500;
-  padding: 10px;
+  padding: 8px 10px;
+}
+
+.input--compact {
+  font-size: 16px;
+  padding: 7px 10px;
 }
 
 .textarea {
