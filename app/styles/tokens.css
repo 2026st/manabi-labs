@@ -1,0 +1,13 @@
+:root {
+  --font-main: "Rounded Mplus 1c", sans-serif;
+
+  --color-bg-page: #efefef;
+  --color-bg-surface: #fefefe;
+  --color-text-main: #4a4a4a;
+  --color-text-sub: #8e8e8e;
+  --color-primary: #4ec7b0;
+  --color-primary-deep: #4ab8a2;
+  --color-line: #d9d9d9;
+  --color-shadow: rgba(0, 0, 0, 0.25);
+  --color-card-icon: #a7e5d8;
+}
