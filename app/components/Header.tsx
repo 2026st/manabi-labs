@@ -40,7 +40,7 @@ export function Header({ paper = false }: { paper?: boolean }) {
         <div className="header__actions">
           <button
             type="button"
-            className="icon-btn"
+            className="icon-btn icon-btn--theme"
             aria-label="テーマカラー変更"
             aria-pressed={isDarkTheme}
             onClick={toggleTheme}

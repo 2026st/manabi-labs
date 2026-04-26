@@ -92,6 +92,10 @@ a {
   cursor: pointer;
 }
 
+.icon-btn--theme {
+  color: var(--color-primary);
+}
+
 .icon-btn > img {
   width: 24px;
   height: 24px;
