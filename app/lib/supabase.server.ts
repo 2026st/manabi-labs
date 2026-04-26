@@ -13,10 +13,33 @@ import {
   type ViewArticle
 } from "./corpus.mapper";
 
+function normalizeRuntimeValue(value: string | undefined) {
+  if (!value) return "";
+  if (value.startsWith("__") && value.endsWith("__")) return "";
+  return value;
+}
+
+function readRuntimeEnv() {
+  if (typeof window === "undefined") {
+    return { supabaseUrl: "", supabaseKey: "" };
+  }
+
+  const appEnv = window.__APP_ENV__;
+  return {
+    supabaseUrl: normalizeRuntimeValue(appEnv?.SUPABASE_URL),
+    supabaseKey: normalizeRuntimeValue(appEnv?.SUPABASE_KEY)
+  };
+}
+
+const runtimeEnv = readRuntimeEnv();
 const supabaseUrl =
-  import.meta.env.VITE_SUPABASE_URL ?? import.meta.env.SUPABASE_URL;
+  runtimeEnv.supabaseUrl ||
+  import.meta.env.VITE_SUPABASE_URL ||
+  import.meta.env.SUPABASE_URL;
 const supabaseKey =
-  import.meta.env.VITE_SUPABASE_KEY ?? import.meta.env.SUPABASE_KEY;
+  runtimeEnv.supabaseKey ||
+  import.meta.env.VITE_SUPABASE_KEY ||
+  import.meta.env.SUPABASE_KEY;
 
 const supabase =
   supabaseUrl && supabaseKey
